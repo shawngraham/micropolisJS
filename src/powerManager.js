@@ -20,11 +20,15 @@ import { Random } from './random.ts';
 import { ANIMBIT, BURNBIT, CONDBIT, POWERBIT } from "./tileFlags.ts";
 import { NUCLEAR, POWERPLANT } from "./tileValues.ts";
 
+// Roman theme: "Power" represents water distribution from aqueducts
+// COAL_POWER_STRENGTH = Water capacity of standard aqueduct
+// NUCLEAR_POWER_STRENGTH = Water capacity of great aqueduct (Aqua Claudia scale)
 var COAL_POWER_STRENGTH = 700;
 var NUCLEAR_POWER_STRENGTH = 2000;
 
 
 var PowerManager = EventEmitter(function(map) {
+  // In Roman context: manages water distribution from aqueducts
   this._map = map;
   this._powerStack = [];
   this.powerGridMap = new BlockMap(this._map.width, this._map.height, 1);

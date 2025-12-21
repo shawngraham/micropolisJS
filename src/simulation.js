@@ -45,7 +45,7 @@ var Simulation = EventEmitter(function (gameMap, gameLevel, speed, savedGame) {
   this._cityTime = 0;
   this._cityPopLast = 0;
   this._messageLast = undefined;
-  this._startingYear = 1900;
+  this._startingYear = 100; // 100 AD - 1st century Rome
 
   // Last date sent to front end
   this._cityYearLast = -1;
@@ -114,7 +114,7 @@ var Simulation = EventEmitter(function (gameMap, gameLevel, speed, savedGame) {
   if (savedGame) {
     this.load(savedGame);
   } else {
-    this.budget.setFunds(20000);
+    this.budget.setFunds(20000); // Starting treasury in denarii (Roman currency)
     this._census.totalPop = 1;
   }
 
