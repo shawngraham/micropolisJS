@@ -112,26 +112,27 @@ var neutraliseTrafficMap = function(blockMaps) {
 
 
 // Given a tileValue, score it on the pollution it generates, in the range 0-255
+// ROMAN CONTEXT: Pollution in 1st century Rome was very different from industrial-era pollution
 var getPollutionValue = function(tileValue) {
   if (tileValue < TileValues.POWERBASE) {
-    // Roads, fires and radiation lie below POWERBASE
+    // Roads, fires and urban waste lie below POWERBASE
 
-    // Heavy traffic is bad
+    // Heavy traffic (carts, wagons, animals) = congestion, noise, animal waste
     if (tileValue >= TileValues.HTRFBASE)
-      return 75;
+      return 60; // Slightly reduced from 75
 
-    // Low traffic not so much
+    // Low traffic
     if (tileValue >= TileValues.LTRFBASE)
-      return 50;
+      return 35; // Reduced from 50
 
     if (tileValue <  TileValues.ROADBASE) {
-      // Fire = carbon monoxide = a bad score for you
+      // Fire = smoke and destruction (common in wooden insulae)
       if (tileValue > TileValues.FIREBASE)
-        return 90;
+        return 90; // Keep same
 
-      // Radiation. Top of the charts.
+      // Aqueduct collapse / contaminated water = severe health hazard
       if (tileValue >= TileValues.RADTILE)
-        return 255;
+        return 200; // Reduced from 255 (not radioactive!)
     }
 
     // All other types of ground are pure.
@@ -140,17 +141,19 @@ var getPollutionValue = function(tileValue) {
 
   // If we've reached this point, we're classifying some form of zone tile
 
-  // Residential and commercial zones don't pollute
+  // Residential zones produce urban waste
   if (tileValue <= TileValues.LASTIND)
-    return 0;
+    return 5; // Small pollution from human habitation
 
-  // Industrial zones, however...
+  // Workshops (officinae): fullers (urine stench), metalworking, pottery kilns
+  // Much smaller scale than industrial revolution factories!
   if (tileValue < TileValues.PORTBASE)
-    return 50;
+    return 25; // Reduced from 50 - pre-industrial workshops
 
-  // Coal power plants are bad
+  // Aqueducts provide CLEAN water, they don't pollute!
+  // (In our game, POWERBASE = aqueducts)
   if (tileValue <= TileValues.LASTPOWERPLANT)
-      return 100;
+      return 0; // Changed from 100 - aqueducts are beneficial!
 
   return 0;
 };
