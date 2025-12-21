@@ -15,17 +15,17 @@ import { EventEmitter } from './eventEmitter.js';
 import * as Messages from './messages.ts';
 import { MiscUtils } from './miscUtils.js';
 
-// Cost of maintaining 1 police station
-var policeMaintenanceCost = 100;
+// Cost of maintaining 1 urban cohort station (Roman security force)
+var policeMaintenanceCost = 80; // Reduced for Roman economy
 
-// Cost of maintaining 1 fire station
-var fireMaintenanceCost = 100;
+// Cost of maintaining 1 vigiles station (Roman fire brigade)
+var fireMaintenanceCost = 80; // Reduced for Roman economy
 
-// Cost of maintaining 1 road tile
+// Cost of maintaining 1 road tile (Famous Roman roads!)
 var roadMaintenanceCost = 1;
 
-// Cost of maintaining 1 rail tile
-var railMaintenanceCost = 2;
+// Cost of maintaining 1 path tile (Pedestrian paths)
+var railMaintenanceCost = 1; // Reduced from 2 - no heavy rail maintenance
 
 
 var Budget = EventEmitter(function() {
