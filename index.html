@@ -28,7 +28,7 @@
     <img id="sprites" class="imageData" src="images/sprites.png" alt="These are the game's sprites">
     <header id="header" class="chunk border-bottom padding10">
       <div class="left inlineblock">
-        <h1 id="title" class="white fontlarge">micropolisJS</h1>
+        <h1 id="title" class="white fontlarge">Rome - 1st Century AD</h1>
       </div>
       <nav class="white right padding10 inlineblock">
         <ul>
@@ -42,8 +42,8 @@
         <div class="hidden" id="opaque"></div>
         <div data-hasscript="false" id="loadingBanner" class="alignCenter padding10 mintcream chunk shadow centred">Loading</div>
         <div id="splash" class="mintcream awaitGeneration open shadow padding10 centred">
-          <h2 class="chunk alignCenter">Welcome!</h2>
-          <p>micropolisJS is a handmade Javascript port of the open-source city simulator <cite>Micropolis</cite></p>
+          <h2 class="chunk alignCenter">Ave, Imperator!</h2>
+          <p>Build and manage a city in 1st century Rome! Based on the micropolisJS port of <cite>Micropolis</cite></p>
           <div id="splashContainer"></div>
           <div id="splashButtonContainer">
             <div id="splashButtons">
@@ -118,22 +118,22 @@
         <div id="controls" class="controlShadow mintcream z1 initialHidden rightedge open">
           <div id="toolInfo" class="alignCenter"><span id="toolOutput">Tools</span></div>
           <div id="buttons">
-            <button id="residentialButton" data-size="3" data-tool="residential" data-colour="lime" class="toolButton unselected">Residential $100</button>
-            <button id="nuclearButton" data-size="4" data-tool="nuclear" data-colour="mistyrose" class="toolButton unselected">Nuclear $5000</button>
-            <button id="commercialButton" data-size="3" data-tool="commercial" data-colour="blue" class="toolButton unselected">Commercial $100</button>
-            <button id="coalButton" data-size="4" data-tool="coal" data-colour="gray" class="toolButton unselected">Coal $3000</button>
-            <button id="industrialButton" data-size="3" data-tool="industrial" data-colour="yellow" class="toolButton unselected">Industrial $100</button>
-            <button id="policeButton" data-size="3" data-tool="police" data-colour="darkblue" class="toolButton unselected">Police $500</button>
+            <button id="residentialButton" data-size="3" data-tool="insula" data-colour="lime" class="toolButton unselected">Insula $100</button>
+            <button id="nuclearButton" data-size="4" data-tool="great_aqueduct" data-colour="mistyrose" class="toolButton unselected">Great Aqueduct $4000</button>
+            <button id="commercialButton" data-size="3" data-tool="market" data-colour="blue" class="toolButton unselected">Market $100</button>
+            <button id="coalButton" data-size="4" data-tool="aqueduct" data-colour="gray" class="toolButton unselected">Aqueduct $2500</button>
+            <button id="industrialButton" data-size="3" data-tool="workshop" data-colour="yellow" class="toolButton unselected">Workshop $100</button>
+            <button id="policeButton" data-size="3" data-tool="urban_cohort" data-colour="darkblue" class="toolButton unselected">Urban Cohort $400</button>
             <button id="roadButton" data-size="1" data-tool="road" data-colour="black" class="toolButton unselected">Road $10</button>
-            <button id="fireButton" data-size="3" data-tool="fire" data-colour="red" class="toolButton unselected">Fire $500</button>
-            <button id="railButton" data-size="1" data-tool="rail" data-colour="brown" class="toolButton unselected">Rail $20</button>
-            <button id="portButton" data-size="4" data-tool="port" data-colour="dodgerblue" class="toolButton unselected">Port $3000</button>
-            <button id="wireButton" data-size="1" data-tool="wire" data-colour="khaki" class="toolButton unselected">Wire $5</button>
-            <button id="stadiumButton" data-size="4" data-tool="stadium" data-colour="indigo" class="toolButton unselected">Stadium $5000</button>
+            <button id="fireButton" data-size="3" data-tool="vigiles" data-colour="red" class="toolButton unselected">Vigiles $400</button>
+            <button id="railButton" data-size="1" data-tool="path" data-colour="brown" class="toolButton unselected">Path $10</button>
+            <button id="portButton" data-size="4" data-tool="harbor" data-colour="dodgerblue" class="toolButton unselected">Harbor $2500</button>
+            <button id="wireButton" data-size="1" data-tool="aqueduct_line" data-colour="khaki" class="toolButton unselected">Aqueduct Line $5</button>
+            <button id="stadiumButton" data-size="4" data-tool="circus" data-colour="indigo" class="toolButton unselected">Circus $4000</button>
             <button id="bulldozerButton" data-size="1" data-tool="bulldozer" data-colour="salmon" class="toolButton unselected">Bulldozer $1</button>
-            <button id="airportButton" data-size="6" data-tool="airport" data-colour="violet" class="toolButton unselected">Airport $10000</button>
+            <button id="airportButton" data-size="6" data-tool="forum" data-colour="violet" class="toolButton unselected">Forum $8000</button>
             <button id="queryButton" data-size="1" data-tool="query" data-colour="cyan" class="toolButton unselected">Query</button>
-            <button id="parkButton" data-size="1" data-tool="park" data-colour="darkgreen" class="toolButton unselected">Park $10</button>
+            <button id="parkButton" data-size="1" data-tool="park" data-colour="darkgreen" class="toolButton unselected">Garden $10</button>
           </div>
         </div>
         <div id="tw" class="z1 rightedge initialHidden">
@@ -193,14 +193,14 @@
               </div>
             </fieldset>
             <fieldset class="budgetRight">
-              <legend>Fire</legend>
+              <legend>Vigiles</legend>
               <input type="range" id="fireRate" min="0" max="100" step="1" data-source="fireMaintenanceBudget">
               <div>
                 <label for="fireRate" class="elided budgetData" id="fireRateLabel">100% of $100 = $100</label>
               </div>
             </fieldset>
             <fieldset>
-              <legend>Police</legend>
+              <legend>Urban Cohorts</legend>
               <input type="range" id="policeRate" min="0" max="100" step="1" data-source="policeMaintenanceBudget">
               <div>
                 <label for="policeRate" class="elided budgetData" id="policeRateLabel">100% of $100 = $100</label>
@@ -262,14 +262,14 @@
         <div id="disasterContainer" class="padding10 open">
           <form id="disasterForm">
             <div id="disasterSelectContainer" class="alignCenter">
-              <label id="disasterLabel" for="disasterSelect">What disaster do you want to befall this unsuspecting world?</label>
+              <label id="disasterLabel" for="disasterSelect">What disaster do you want to befall this Roman city?</label>
               <select id="disasterSelect">
                 <option id="disasterNone" value="None">None</option>
-                <option id="disasterMonster" value="Monster">Monster</option>
+                <option id="disasterMonster" value="Monster">Barbarian Horde</option>
                 <option id="disasterFire" value="None">Fire</option>
                 <option id="disasterFlood" value="Flood">Flood</option>
-                <option id="disasterCrash" value="Crash">Crash</option>
-                <option id="disasterMeltdown" value="Meltdown">Meltdown</option>
+                <option id="disasterCrash" value="Crash">Chariot Crash</option>
+                <option id="disasterMeltdown" value="Meltdown">Aqueduct Collapse</option>
                 <option id="disasterTornado" value="Tornado">Tornado</option>
               </select>
             </div>

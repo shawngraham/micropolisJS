@@ -24,23 +24,24 @@ import * as TileValues from "./tileValues.ts";
 import { WireTool } from './wireTool.js';
 
 function GameTools(map) {
+  // Roman-themed building tools (1st century Rome)
   var tools = EventEmitter({
-    airport: new BuildingTool(10000, TileValues.AIRPORT, map, 6, false),
+    forum: new BuildingTool(8000, TileValues.AIRPORT, map, 6, false), // Major civic center (was airport)
     bulldozer: new BulldozerTool(map),
-    coal: new BuildingTool(3000, TileValues.POWERPLANT, map, 4, false),
-    commercial: new BuildingTool(100, TileValues.COMCLR, map, 3, false),
-    fire: new BuildingTool(500, TileValues.FIRESTATION, map, 3, false),
-    industrial: new BuildingTool(100, TileValues.INDCLR, map, 3, false),
-    nuclear: new BuildingTool(5000, TileValues.NUCLEAR, map, 4, true),
-    park: new ParkTool(map),
-    police: new BuildingTool(500, TileValues.POLICESTATION, map, 3, false),
-    port: new BuildingTool(3000, TileValues.PORT, map, 4, false),
-    rail: new RailTool(map),
-    residential: new BuildingTool(100, TileValues.FREEZ, map, 3, false),
-    road: new RoadTool(map),
+    aqueduct: new BuildingTool(2500, TileValues.POWERPLANT, map, 4, false), // Water source (was coal)
+    market: new BuildingTool(100, TileValues.COMCLR, map, 3, false), // Commercial zone (was commercial)
+    vigiles: new BuildingTool(400, TileValues.FIRESTATION, map, 3, false), // Fire brigade (was fire)
+    workshop: new BuildingTool(100, TileValues.INDCLR, map, 3, false), // Production zone (was industrial)
+    great_aqueduct: new BuildingTool(4000, TileValues.NUCLEAR, map, 4, true), // Major water source (was nuclear)
+    park: new ParkTool(map), // Gardens remain
+    urban_cohort: new BuildingTool(400, TileValues.POLICESTATION, map, 3, false), // Security force (was police)
+    harbor: new BuildingTool(2500, TileValues.PORT, map, 4, false), // Port/harbor
+    road: new RoadTool(map), // Roman roads
+    insula: new BuildingTool(100, TileValues.FREEZ, map, 3, false), // Residential (was residential)
+    path: new RailTool(map), // Pedestrian paths (was rail)
     query: new QueryTool(map),
-    stadium: new BuildingTool(5000, TileValues.STADIUM, map, 4, false),
-    wire: new WireTool(map),
+    circus: new BuildingTool(4000, TileValues.STADIUM, map, 4, false), // Entertainment (was stadium)
+    aqueduct_line: new WireTool(map), // Water distribution lines (was wire)
   });
 
   tools.query.addEventListener(QUERY_WINDOW_NEEDED, MiscUtils.reflectEvent.bind(tools, QUERY_WINDOW_NEEDED));
