@@ -252,20 +252,22 @@ Budget.prototype.collectTax = function(gameLevel, census) {
   var provincialTribute = 3000 * FLevels[gameLevel];
 
   // Sales tax (1% on commercial activity)
-  var salesTax = Math.floor(census.comPop * 10); // Markets generate sales tax
+  var salesTax = Math.floor((census.comPop || 0) * 10); // Markets generate sales tax
 
   // Customs duties from harbor
-  var customsDuties = Math.floor(census.seaPortPop * 200);
+  var customsDuties = Math.floor((census.seaPortPop || 0) * 200);
 
   // Limited direct taxation (only in emergencies, represented by cityTax slider)
   // Much lower than modern property tax
-  var directTax = Math.floor(Math.floor(census.totalPop * census.landValueAverage / 300) * this.cityTax * 0.3);
+  var totalPop = census.totalPop || 0;
+  var landValue = census.landValueAverage || 0;
+  var directTax = Math.floor(Math.floor(totalPop * landValue / 300) * this.cityTax * 0.3);
 
-  this.taxFund = provincialTribute + salesTax + customsDuties + directTax;
+  this.taxFund = Math.floor(provincialTribute + salesTax + customsDuties + directTax);
 
   // GRAIN DOLE (annona) - Major expense! Free grain for citizens
   // ~40% of free population received grain dole in Rome
-  var freeCitizens = census.totalPop * 0.65; // 35% are slaves, 65% are free
+  var freeCitizens = totalPop * 0.65; // 35% are slaves, 65% are free
   var grainDoleCost = Math.floor(freeCitizens * 0.4 * 50); // 40% of free citizens get grain
 
   if (census.totalPop > 0) {
