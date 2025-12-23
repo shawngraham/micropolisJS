@@ -20,11 +20,19 @@ import { Random } from './random.ts';
 import { ANIMBIT, BURNBIT, CONDBIT, POWERBIT } from "./tileFlags.ts";
 import { NUCLEAR, POWERPLANT } from "./tileValues.ts";
 
-// Roman theme: "Power" represents water distribution from aqueducts
-// COAL_POWER_STRENGTH = Water capacity of standard aqueduct
-// NUCLEAR_POWER_STRENGTH = Water capacity of great aqueduct (Aqua Claudia scale)
-var COAL_POWER_STRENGTH = 700;
-var NUCLEAR_POWER_STRENGTH = 2000;
+// ROMAN WATER DISTRIBUTION (1st century AD)
+// Aqueducts fed PUBLIC FOUNTAINS, not individual buildings!
+// Most people walked to fountains (<5 minutes) to get water
+// Only elite domus had private connections (very rare)
+//
+// Water capacity:
+var COAL_POWER_STRENGTH = 700;      // Standard aqueduct capacity
+var NUCLEAR_POWER_STRENGTH = 2000;  // Great aqueduct (Aqua Claudia scale)
+
+// FOUNTAIN SYSTEM: Aqueducts provide water in an area
+var FOUNTAIN_RADIUS = 15;           // Tiles within 15 tiles of aqueduct get water
+var FOUNTAIN_RADIUS_LARGE = 25;     // Great aqueducts have larger reach
+var DOMUS_NEEDS_CONNECTION = false; // Even elite domus use public fountains now
 
 
 var PowerManager = EventEmitter(function(map) {
@@ -69,6 +77,42 @@ PowerManager.prototype.testForConductive = function(pos, testDir) {
 };
 
 
+// ROMAN FOUNTAIN SYSTEM: Provide water in area around aqueducts
+PowerManager.prototype.doFountainScan = function(census) {
+  // Find all aqueduct locations and provide water to surrounding areas
+  for (var x = 0; x < this._map.width; x++) {
+    for (var y = 0; y < this._map.height; y++) {
+      var tileValue = this._map.getTileValue(x, y);
+
+      // Is this an aqueduct (power plant)?
+      if (tileValue === NUCLEAR || tileValue === POWERPLANT) {
+        var radius = (tileValue === NUCLEAR) ? FOUNTAIN_RADIUS_LARGE : FOUNTAIN_RADIUS;
+
+        // Provide water to all tiles in radius (public fountain coverage)
+        for (var dx = -radius; dx <= radius; dx++) {
+          for (var dy = -radius; dy <= radius; dy++) {
+            var targetX = x + dx;
+            var targetY = y + dy;
+
+            // Check if within map bounds
+            if (targetX >= 0 && targetX < this._map.width &&
+                targetY >= 0 && targetY < this._map.height) {
+
+              // Calculate actual distance (Manhattan distance for simplicity)
+              var distance = Math.abs(dx) + Math.abs(dy);
+
+              if (distance <= radius) {
+                // Within fountain walking distance - provide water
+                this.powerGridMap.worldSet(targetX, targetY, 1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+
 // Note: the algorithm is buggy: if you have two adjacent power
 // plants, the second will be regarded as drawing power from the first
 // rather than as a power source itself
@@ -82,6 +126,7 @@ PowerManager.prototype.doPowerScan = function(census) {
 
   var powerConsumption = 0; // Amount of power used.
 
+  // ROMAN WATER SYSTEM: First, do traditional connection-based scan for aqueduct lines
   while (this._powerStack.length > 0) {
     var pos = this._powerStack.pop();
     var anyDir = undefined;
@@ -114,6 +159,10 @@ PowerManager.prototype.doPowerScan = function(census) {
         this._powerStack.push(new Position(pos.x, pos.y));
     } while (conNum);
   }
+
+  // ROMAN FOUNTAIN SYSTEM: Add area-of-effect water from aqueducts
+  // This represents public fountains fed by aqueducts
+  this.doFountainScan(census);
 };
 
 
