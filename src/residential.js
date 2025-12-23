@@ -20,6 +20,14 @@ import * as TileValues from "./tileValues.ts";
 import { Traffic } from './traffic.js';
 import { ZoneUtils } from './zoneUtils.js';
 
+// ROMAN HOUSING (1st century AD)
+// Domus: Elite townhouses (low density, stone construction, low fire risk)
+// Insulae: Multi-story tenements (high density, wooden upper floors, high fire risk)
+var DOMUS_LAND_VALUE_THRESHOLD = 150; // Land value above which domus are built
+var INSULA_FIRE_RISK_BASE = 0.008; // ~0.8% fire chance per update for insulae
+var DOMUS_FIRE_RISK = 0.001; // ~0.1% fire chance (stone construction)
+var TABERNAE_CHANCE = 0.65; // 65% chance ground floor has shops (tabernae)
+
 // Residential tiles have 'populations' of 16, 24, 32 or 40, and value from 0 to 3. The tiles are laid out in
 // increasing order of land value, cycling through each population value
 var placeResidential = function(map, x, y, population, lpValue, zonePower) {
@@ -122,6 +130,10 @@ var growZone = function(map, x, y, blockMaps, population, lpValue, zonePower) {
     return;
 
   var tileValue = map.getTileValue(x, y);
+  var landValue = blockMaps.landValueMap.worldGet(x, y);
+
+  // ROMAN HOUSING: Determine if this is domus (elite) or insula (common) area
+  var isDomusArea = landValue >= DOMUS_LAND_VALUE_THRESHOLD;
 
   if (tileValue === TileValues.FREEZ) {
     if (population < 8) {
@@ -129,7 +141,18 @@ var growZone = function(map, x, y, blockMaps, population, lpValue, zonePower) {
       buildHouse(map, x, y, lpValue);
       ZoneUtils.incRateOfGrowth(blockMaps, x, y, 1);
     } else if (blockMaps.populationDensityMap.worldGet(x, y) > 64) {
-      // There is local demand for higher density housing
+      // ROMAN HOUSING: High density = insulae (tenements)
+      // Insulae often had tabernae (shops/workshops) on ground floor
+      if (!isDomusArea && Random.getRandom(100) < (TABERNAE_CHANCE * 100)) {
+        // Mixed-use: Add nearby commercial activity (tabernae)
+        // This represents ground-floor shops in the insula
+        // We track this abstractly through increased commercial demand
+        blockMaps.comDemandMap = blockMaps.comDemandMap || blockMaps.tempMap1;
+        var currentDemand = blockMaps.comDemandMap.worldGet(x, y) || 0;
+        blockMaps.comDemandMap.worldSet(x, y, Math.min(currentDemand + 5, 50));
+      }
+
+      // Place residential zone (insula or domus depending on land value)
       placeResidential(map, x, y, 0, lpValue, zonePower);
       ZoneUtils.incRateOfGrowth(blockMaps, x, y, 8);
     }
@@ -222,6 +245,35 @@ var residentialFound = function(map, x, y, simData) {
   simData.census.resPop += population;
 
   var zonePower = map.getTile(x, y).isPowered();
+
+  // ROMAN HOUSING: Fire risk based on building type
+  // Insulae (high density, wooden upper floors) = HIGH fire risk
+  // Domus (low density, stone) = LOW fire risk
+  if (population > 0) {
+    var landValue = simData.blockMaps.landValueMap.worldGet(x, y);
+    var isDomus = landValue >= DOMUS_LAND_VALUE_THRESHOLD;
+    var isHighDensity = population >= 24; // Insulae are high density
+
+    var fireRisk = isDomus ? DOMUS_FIRE_RISK : (isHighDensity ? INSULA_FIRE_RISK_BASE * 1.5 : INSULA_FIRE_RISK_BASE);
+
+    // Higher density insulae = higher fire risk (more wooden floors, more people, more fires)
+    if (!isDomus && population >= 32) {
+      fireRisk *= 1.3; // 30% higher for very high density insulae
+    }
+
+    // Check for fire outbreak
+    if (Random.getRandom(10000) < (fireRisk * 10000)) {
+      // Fire breaks out in residential zone!
+      // Use the disaster manager's makefire if available, or set fire tile directly
+      if (simData.disasterManager && simData.disasterManager.makeFire) {
+        simData.disasterManager.makeFire();
+      } else {
+        // Fallback: set center tile on fire
+        map.setTile(x, y, Random.getRandom(3) + TileValues.FIREBASE, BLBNCNBIT);
+      }
+      return; // Fire consumes zone evaluation
+    }
+  }
 
   var trafficOK = Traffic.ROUTE_FOUND;
 
