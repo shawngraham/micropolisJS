@@ -23,12 +23,13 @@ var landValueStrings = ['Slum', 'Lower Class', 'Middle Class', 'High'];
 var crimeStrings = ['Safe', 'Light', 'Moderate', 'Dangerous'];
 var pollutionStrings = ['None', 'Moderate', 'Heavy', 'Very Heavy'];
 var rateStrings = ['Declining', 'Stable', 'Slow Growth', 'Fast Growth'];
-var zoneTypes = ['Clear', 'Water', 'Trees', 'Rubble', 'Flood', 'Radioactive Waste',
-                 'Fire', 'Road', 'Power', 'Rail', 'Residential', 'Commercial',
-                 'Industrial', 'Seaport', 'Airport', 'Coal Power', 'Fire Department',
-                 'Police Department', 'Stadium', 'Nuclear Power', 'Draw Bridge',
-                 'Radar Dish', 'Fountain', 'Industrial', 'Steelers 38  Bears 3',
-                 'Draw Bridge', 'Ur 238'];
+// ROMAN ZONE TYPES (1st century AD)
+var zoneTypes = ['Clear', 'Water', 'Trees', 'Rubble', 'Flood', 'Contaminated Water',
+                 'Fire', 'Roman Road', 'Aqueduct', 'Path', 'Insula', 'Market',
+                 'Workshop', 'Harbor', 'Forum', 'Aqueduct', 'Vigiles Station',
+                 'Urban Cohort Station', 'Circus', 'Great Aqueduct', 'Bridge',
+                 'Fountain', 'Garden', 'Workshop', 'Circus Maximus',
+                 'Bridge', 'Aqua Claudia'];
 
 // Evaluation window
 var gameLevel = {};
@@ -44,14 +45,15 @@ cityClass[Evaluation.CC_CAPITAL] = 'CAPITAL';
 cityClass[Evaluation.CC_METROPOLIS] = 'METROPOLIS';
 cityClass[Evaluation.CC_MEGALOPOLIS] = 'MEGALOPOLIS';
 
+// ROMAN URBAN PROBLEMS (1st century perspective)
 var problems = {};
-problems[Evaluation.CRIME] = 'Crime';
-problems[Evaluation.POLLUTION] = 'Pollution';
-problems[Evaluation.HOUSING] = 'Housing';
-problems[Evaluation.TAXES] = 'Taxes';
-problems[Evaluation.TRAFFIC] = 'Traffic';
-problems[Evaluation.UNEMPLOYMENT] = 'Unemployment';
-problems[Evaluation.FIRE] = 'Fire';
+problems[Evaluation.CRIME] = 'Banditry & Crime';
+problems[Evaluation.POLLUTION] = 'Urban Squalor';
+problems[Evaluation.HOUSING] = 'Overcrowded Insulae';
+problems[Evaluation.TAXES] = 'Excessive Taxation';
+problems[Evaluation.TRAFFIC] = 'Cart Congestion';
+problems[Evaluation.UNEMPLOYMENT] = 'Lack of Work';
+problems[Evaluation.FIRE] = 'Fire in Wooden Buildings';
 
 // months
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -109,46 +111,47 @@ goodMessages[Messages.REACHED_MEGALOPOLIS] = true;
 goodMessages[Messages.REACHED_METROPOLIS] = true;
 goodMessages[Messages.REACHED_TOWN] = true;
 
+// ROMAN-THEMED MESSAGES (1st century AD)
 var messageText = {};
-messageText[Messages.FIRE_STATION_NEEDS_FUNDING] = 'Fire departments need funding';
-messageText[Messages.NEED_AIRPORT] = 'Commerce requires an Airport';
-messageText[Messages.NEED_FIRE_STATION] = 'Citizens demand a Fire Department';
-messageText[Messages.NEED_ELECTRICITY] = 'Build a Power Plant';
-messageText[Messages.NEED_MORE_INDUSTRIAL] = 'More industrial zones needed';
-messageText[Messages.NEED_MORE_COMMERCIAL] = 'More commercial zones needed';
-messageText[Messages.NEED_MORE_RESIDENTIAL] = 'More residential zones needed';
-messageText[Messages.NEED_MORE_RAILS] = 'Inadequate rail system';
-messageText[Messages.NEED_MORE_ROADS] = 'More roads required';
-messageText[Messages.NEED_POLICE_STATION] = 'Citizens demand a Police Department';
-messageText[Messages.NEED_SEAPORT] = 'Industry requires a Sea Port';
-messageText[Messages.NEED_STADIUM] = 'Residents demand a Stadium';
+messageText[Messages.FIRE_STATION_NEEDS_FUNDING] = 'Vigiles need funding';
+messageText[Messages.NEED_AIRPORT] = 'Commerce requires a Forum';
+messageText[Messages.NEED_FIRE_STATION] = 'Citizens demand Vigiles (fire brigade)';
+messageText[Messages.NEED_ELECTRICITY] = 'Build an Aqueduct';
+messageText[Messages.NEED_MORE_INDUSTRIAL] = 'More workshops (officinae) needed';
+messageText[Messages.NEED_MORE_COMMERCIAL] = 'More markets needed';
+messageText[Messages.NEED_MORE_RESIDENTIAL] = 'More insulae needed';
+messageText[Messages.NEED_MORE_RAILS] = 'Inadequate path system';
+messageText[Messages.NEED_MORE_ROADS] = 'More Roman roads required';
+messageText[Messages.NEED_POLICE_STATION] = 'Citizens demand Urban Cohorts';
+messageText[Messages.NEED_SEAPORT] = 'Trade requires a Harbor';
+messageText[Messages.NEED_STADIUM] = 'The people demand a Circus!';
 messageText[Messages.ROAD_NEEDS_FUNDING] = 'Roads deteriorating, due to lack of funds';
-messageText[Messages.POLICE_NEEDS_FUNDING] = 'Police departments need funding';
-messageText[Messages.WELCOME] = 'Welcome to micropolisJS';
-messageText[Messages.BLACKOUTS_REPORTED] = 'Brownouts, build another Power Plant';
-messageText[Messages.EARTHQUAKE] = 'Major earthquake reported !!';
-messageText[Messages.EXPLOSION_REPORTED] = 'Explosion detected ';
-messageText[Messages.FLOODING_REPORTED] = 'Flooding reported !';
-messageText[Messages.FIRE_REPORTED] = 'Fire reported ';
-messageText[Messages.HEAVY_TRAFFIC] = 'Heavy Traffic reported';
-messageText[Messages.HELICOPTER_CRASHED] = 'A helicopter crashed ';
-messageText[Messages.HIGH_CRIME] = 'Crime very high';
-messageText[Messages.HIGH_POLLUTION] = 'Pollution very high';
-messageText[Messages.MONSTER_SIGHTED] = 'A Monster has been sighted !';
-messageText[Messages.NO_MONEY] = 'YOUR CITY HAS GONE BROKE';
-messageText[Messages.NOT_ENOUGH_POWER] = 'Blackouts reported: insufficient power capacity';
-messageText[Messages.NUCLEAR_MELTDOWN] = 'A Nuclear Meltdown has occurred !!';
-messageText[Messages.PLANE_CRASHED] = 'A plane has crashed ';
-messageText[Messages.SHIP_CRASHED] = 'Shipwreck reported ';
-messageText[Messages.TAX_TOO_HIGH] = 'Citizens upset. The tax rate is too high';
-messageText[Messages.TORNADO_SIGHTED] = 'Tornado reported !';
-messageText[Messages.TRAFFIC_JAMS] = 'Frequent traffic jams reported';
-messageText[Messages.TRAIN_CRASHED] = 'A train crashed ';
-messageText[Messages.REACHED_CAPITAL] = 'Population has reached 50,000';
-messageText[Messages.REACHED_CITY] = 'Population has reached 10,000';
-messageText[Messages.REACHED_MEGALOPOLIS] = 'Population has reached 500,000';
-messageText[Messages.REACHED_METROPOLIS] = 'Population has reached 100,000';
-messageText[Messages.REACHED_TOWN] = 'Population has reached 2,000';
+messageText[Messages.POLICE_NEEDS_FUNDING] = 'Urban Cohorts need funding';
+messageText[Messages.WELCOME] = 'Welcome to Rome - 1st Century AD';
+messageText[Messages.BLACKOUTS_REPORTED] = 'Water shortages, build another Aqueduct';
+messageText[Messages.EARTHQUAKE] = 'Major earthquake reported!';
+messageText[Messages.EXPLOSION_REPORTED] = 'Explosion detected';
+messageText[Messages.FLOODING_REPORTED] = 'Flooding from the Tiber!';
+messageText[Messages.FIRE_REPORTED] = 'Fire in the insulae!';
+messageText[Messages.HEAVY_TRAFFIC] = 'Heavy cart and wagon traffic';
+messageText[Messages.HELICOPTER_CRASHED] = 'A cart overturned';
+messageText[Messages.HIGH_CRIME] = 'Crime very high - bandits active';
+messageText[Messages.HIGH_POLLUTION] = 'Pollution very high - air quality poor';
+messageText[Messages.MONSTER_SIGHTED] = 'Barbarian horde sighted!';
+messageText[Messages.NO_MONEY] = 'THE TREASURY IS EMPTY!';
+messageText[Messages.NOT_ENOUGH_POWER] = 'Water shortages: insufficient aqueduct capacity';
+messageText[Messages.NUCLEAR_MELTDOWN] = 'Aqueduct collapse!';
+messageText[Messages.PLANE_CRASHED] = 'A chariot crashed';
+messageText[Messages.SHIP_CRASHED] = 'Shipwreck in the harbor!';
+messageText[Messages.TAX_TOO_HIGH] = 'Citizens protest: taxation too high!';
+messageText[Messages.TORNADO_SIGHTED] = 'Tornado sighted!';
+messageText[Messages.TRAFFIC_JAMS] = 'Streets congested with carts';
+messageText[Messages.TRAIN_CRASHED] = 'A wagon overturned';
+messageText[Messages.REACHED_CAPITAL] = 'Rome now rivals Alexandria! (50,000 inhabitants)';
+messageText[Messages.REACHED_CITY] = 'Your settlement is now a proper city (10,000)';
+messageText[Messages.REACHED_MEGALOPOLIS] = 'Largest city in the Empire! (500,000)';
+messageText[Messages.REACHED_METROPOLIS] = 'A great metropolis of the Roman world (100,000)';
+messageText[Messages.REACHED_TOWN] = 'Your village is now a town (2,000)';
 
 var Text = {
   badMessages: badMessages,
